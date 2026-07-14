@@ -30,6 +30,7 @@ import androidx.navigation.compose.rememberNavController
 import com.capstone.datara.ui.screens.AccountRecoveryScreen
 import com.capstone.datara.ui.screens.CsvManagementScreen
 import com.capstone.datara.ui.screens.DashboardScreen
+import com.capstone.datara.ui.screens.SplashScreen
 import com.capstone.datara.ui.screens.DeleteAccountScreen
 import com.capstone.datara.ui.screens.DeletedSuccessfullyScreen
 import com.capstone.datara.ui.screens.ForgetPassword
@@ -149,7 +150,7 @@ fun DataraApp() {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = "login",
+            startDestination = "splash",
             modifier = Modifier.padding(innerPadding),
             // Default transitions for all routes
             enterTransition = { forwardEnter() },
@@ -157,6 +158,21 @@ fun DataraApp() {
             popEnterTransition = { popEnter() },
             popExitTransition = { popExit() }
         ) {
+            // ── SPLASH ──────────────────────────────────────────────────────
+            composable(
+                "splash",
+                enterTransition = { fadeIn(animationSpec = tween(300)) },
+                exitTransition = { fadeOut(animationSpec = tween(300)) }
+            ) {
+                SplashScreen(
+                    onNavigateToLogin = {
+                        navController.navigate("login") {
+                            popUpTo("splash") { inclusive = true }
+                        }
+                    }
+                )
+            }
+
             // ── AUTHENTICATION FLOW ─────────────────────────────────────────
             composable(
                 "login",

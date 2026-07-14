@@ -9,7 +9,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -23,6 +22,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.capstone.datara.ui.components.TopAppBarDark
 import com.capstone.datara.ui.theme.PrimaryBlue
 
 @Composable
@@ -38,46 +38,11 @@ fun HistoryScreen(
             .fillMaxSize()
             .background(Color(0xFFF0F0F5))
     ) {
-        // Top App Bar
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color(0xFF1A1C23))
-                .padding(horizontal = 16.dp, vertical = 20.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Surface(
-                    color = Color.DarkGray,
-                    shape = RoundedCornerShape(8.dp),
-                    modifier = Modifier.padding(end = 12.dp)
-                ) {
-                    Text(
-                        "TM", color = Color.White,
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-                Text("+6308312035", color = Color.White, fontSize = 16.sp)
-            }
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Icon(
-                    Icons.Default.Notifications,
-                    contentDescription = "Notifications",
-                    tint = Color.White,
-                    modifier = Modifier.size(24.dp).clickable { onNotificationClick() }
-                )
-                Surface(
-                    modifier = Modifier.size(38.dp).clip(CircleShape).clickable { onProfileClick() },
-                    color = Color(0xFF3A3F55)
-                ) {
-                    Box(contentAlignment = Alignment.Center) {
-                        Text("U", color = Color.White, fontWeight = FontWeight.Bold)
-                    }
-                }
-            }
-        }
+        // Top App Bar — shared component
+        TopAppBarDark(
+            onNotificationClick = onNotificationClick,
+            onProfileClick = onProfileClick
+        )
 
         Column(
             modifier = Modifier

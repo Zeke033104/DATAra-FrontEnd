@@ -33,6 +33,7 @@ fun AccountRecoveryScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(DarkBackground)
+            .imePadding()
             .padding(24.dp)
             .verticalScroll(rememberScrollState())
     ) {
