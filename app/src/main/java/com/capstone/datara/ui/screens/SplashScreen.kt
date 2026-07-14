@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.capstone.datara.R
 import com.capstone.datara.ui.theme.DarkBackground
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun SplashScreen(onNavigateToLogin: () -> Unit) {
