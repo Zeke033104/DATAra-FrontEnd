@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.capstone.datara.ui.components.TopAppBarDark
+import com.capstone.datara.ui.components.FilterBottomSheet
 import com.capstone.datara.ui.theme.PrimaryBlue
 
 @Composable
@@ -32,6 +33,8 @@ fun HistoryScreen(
 ) {
     var selectedTab by remember { mutableStateOf("Daily") }
     val tabs = listOf("Daily", "Weekly", "Monthly")
+    var showFilterSheet by remember { mutableStateOf(false) }
+    var activeFilter by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -43,6 +46,17 @@ fun HistoryScreen(
             onNotificationClick = onNotificationClick,
             onProfileClick = onProfileClick
         )
+
+        // ── Filter Bottom Sheet ──────────────────────────────────────────
+        if (showFilterSheet) {
+            FilterBottomSheet(
+                onApply = { dateRange, dataRange ->
+                    activeFilter = "$dateRange · $dataRange"
+                    showFilterSheet = false
+                },
+                onDismiss = { showFilterSheet = false }
+            )
+        }
 
         Column(
             modifier = Modifier
@@ -57,11 +71,20 @@ fun HistoryScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text("HISTORY", fontWeight = FontWeight.ExtraBold, fontSize = 26.sp, color = Color.Black)
-                Row {
-                    IconButton(onClick = {}) {
-                        Icon(Icons.Default.Settings, contentDescription = "Filter", tint = Color.Black)
-                    }
+                // Filter icon button — opens FilterBottomSheet
+                IconButton(onClick = { showFilterSheet = true }) {
+                    Icon(Icons.Default.Settings, contentDescription = "Filter", tint = Color.Black)
                 }
+            }
+
+            // Active filter indicator
+            if (activeFilter.isNotBlank()) {
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    "Filtered: $activeFilter",
+                    color = com.capstone.datara.ui.theme.PrimaryBlue,
+                    fontSize = 12.sp
+                )
             }
 
             Spacer(modifier = Modifier.height(12.dp))
