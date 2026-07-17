@@ -39,7 +39,7 @@ fun HistoryScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF0F0F5))
+            .background(MaterialTheme.colorScheme.background)
     ) {
         // Top App Bar — shared component
         TopAppBarDark(
@@ -70,10 +70,9 @@ fun HistoryScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("HISTORY", fontWeight = FontWeight.ExtraBold, fontSize = 26.sp, color = Color.Black)
-                // Filter icon button — opens FilterBottomSheet
+                Text("HISTORY", fontWeight = FontWeight.ExtraBold, fontSize = 26.sp, color = MaterialTheme.colorScheme.onBackground)
                 IconButton(onClick = { showFilterSheet = true }) {
-                    Icon(Icons.Default.Settings, contentDescription = "Filter", tint = Color.Black)
+                    Icon(Icons.Default.Settings, contentDescription = "Filter", tint = MaterialTheme.colorScheme.onBackground)
                 }
             }
 
@@ -92,7 +91,7 @@ fun HistoryScreen(
             // Chart Card with Line Graph
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                 shape = RoundedCornerShape(12.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
@@ -103,16 +102,16 @@ fun HistoryScreen(
                         verticalAlignment = Alignment.Top
                     ) {
                         Column {
-                            Text("TOTAL THIS DAY", color = Color.Gray, fontSize = 11.sp, fontWeight = FontWeight.Medium)
+                            Text("TOTAL THIS DAY", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 11.sp, fontWeight = FontWeight.Medium)
                             Row(verticalAlignment = Alignment.Bottom) {
-                                Text("25.00", fontWeight = FontWeight.Bold, fontSize = 28.sp, color = Color.Black)
-                                Text(" GB", fontSize = 14.sp, color = Color.Gray, modifier = Modifier.padding(bottom = 4.dp))
+                                Text("25.00", fontWeight = FontWeight.Bold, fontSize = 28.sp, color = MaterialTheme.colorScheme.onSurface)
+                                Text(" GB", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(bottom = 4.dp))
                             }
                         }
                         // Tab selector
                         Row(
                             modifier = Modifier
-                                .background(Color(0xFFF0F0F5), RoundedCornerShape(20.dp))
+                                .background(MaterialTheme.colorScheme.background, RoundedCornerShape(20.dp))
                                 .padding(4.dp)
                         ) {
                             tabs.forEach { tab ->
@@ -121,12 +120,12 @@ fun HistoryScreen(
                                     modifier = Modifier
                                         .clip(RoundedCornerShape(16.dp))
                                         .clickable { selectedTab = tab }
-                                        .background(if (isSelected) Color.White else Color.Transparent)
+                                        .background(if (isSelected) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.background)
                                         .padding(horizontal = 10.dp, vertical = 4.dp)
                                 ) {
                                     Text(
                                         tab, fontSize = 12.sp,
-                                        color = if (isSelected) Color.Black else Color.Gray,
+                                        color = if (isSelected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
                                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
                                     )
                                 }
@@ -147,8 +146,8 @@ fun HistoryScreen(
                             modifier = Modifier.fillMaxHeight().padding(end = 4.dp),
                             verticalArrangement = Arrangement.SpaceBetween
                         ) {
-                            listOf("10", "8", "6", "4", "2").forEach {
-                                Text(it, fontSize = 10.sp, color = Color.Gray)
+                        listOf("10", "8", "6", "4", "2").forEach {
+                                Text(it, fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
                         }
 
@@ -215,8 +214,8 @@ fun HistoryScreen(
                         modifier = Modifier.fillMaxWidth().padding(start = 28.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        xLabels.forEach {
-                            Text(it, fontSize = 9.sp, color = Color.Gray)
+                    xLabels.forEach {
+                            Text(it, fontSize = 9.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
                 }
@@ -230,16 +229,16 @@ fun HistoryScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("DETAIL LOGS", fontWeight = FontWeight.ExtraBold, fontSize = 16.sp, color = Color.Black)
+                Text("DETAIL LOGS", fontWeight = FontWeight.ExtraBold, fontSize = 16.sp, color = MaterialTheme.colorScheme.onBackground)
                 Surface(
                     shape = RoundedCornerShape(8.dp),
-                    color = Color(0xFF1A1C23)
+                    color = MaterialTheme.colorScheme.surfaceVariant
                 ) {
                     Row(
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text("Filter", fontSize = 13.sp, color = Color.White, fontWeight = FontWeight.Medium)
+                        Text("Filter", fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Medium)
                     }
                 }
             }
@@ -264,7 +263,7 @@ fun HistoryScreen(
 fun LogEntry(date: String, time: String, dataConsumed: String) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
@@ -273,20 +272,20 @@ fun LogEntry(date: String, time: String, dataConsumed: String) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(date, fontSize = 12.sp, color = Color.Gray)
-                Text("Data consumed", fontSize = 12.sp, color = Color.Gray)
-                Text("Session Duration", fontSize = 12.sp, color = Color.Gray)
-                Text("Peak Speed", fontSize = 12.sp, color = Color.Gray)
+                Text(date, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Data consumed", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Session Duration", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Peak Speed", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Spacer(modifier = Modifier.height(6.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(time, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = Color.Black)
-                Text(dataConsumed, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = Color.Black)
-                Text("2h 15m", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = Color.Black)
-                Text("4.2mb/s", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = Color.Black)
+                Text(time, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
+                Text(dataConsumed, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
+                Text("2h 15m", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
+                Text("4.2mb/s", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
             }
         }
     }

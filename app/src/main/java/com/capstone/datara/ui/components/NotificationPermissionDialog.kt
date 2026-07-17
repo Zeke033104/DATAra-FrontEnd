@@ -17,16 +17,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.capstone.datara.ui.theme.DarkBackground
 import com.capstone.datara.ui.theme.PrimaryGreen
 
 /**
  * Modal dialog that asks the user to allow push notifications.
  * Purely visual — no system permission logic, front-end only.
- *
- * @param onAllowClick   Called when user taps "Allow"
- * @param onDenyClick    Called when user taps "Don't Allow"
- * @param onDismiss      Called when dialog is dismissed (e.g. back press)
  */
 @Composable
 fun NotificationPermissionDialog(
@@ -48,7 +43,7 @@ fun NotificationPermissionDialog(
                 modifier = Modifier
                     .fillMaxWidth(0.85f),
                 shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF1E2233)),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
                 elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
             ) {
                 Column(
@@ -76,7 +71,7 @@ fun NotificationPermissionDialog(
                         text = "Allow Notifications",
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.onSurface
                     )
 
                     Spacer(modifier = Modifier.height(10.dp))
@@ -84,7 +79,7 @@ fun NotificationPermissionDialog(
                     Text(
                         text = "DATAra would like to send you alerts when your data usage is running low or when your plan is about to deplete.",
                         fontSize = 13.sp,
-                        color = Color.Gray,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         textAlign = TextAlign.Center,
                         lineHeight = 20.sp
                     )
@@ -113,12 +108,12 @@ fun NotificationPermissionDialog(
                         onClick = onDenyClick,
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(24.dp),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Gray),
-                        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF3A3F55))
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.onSurfaceVariant),
+                        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
                     ) {
                         Text(
                             "Don't Allow",
-                            color = Color.Gray,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 15.sp
                         )
                     }

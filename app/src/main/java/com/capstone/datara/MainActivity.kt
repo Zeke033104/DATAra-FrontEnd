@@ -51,8 +51,6 @@ import com.capstone.datara.ui.screens.ProfileScreen
 import com.capstone.datara.ui.screens.RegisterScreen
 import com.capstone.datara.ui.screens.SettingsScreen
 import com.capstone.datara.ui.screens.TermsAndConditionsScreen
-import com.capstone.datara.ui.theme.DarkBackground
-import com.capstone.datara.ui.theme.DarkSurface
 import com.capstone.datara.ui.theme.DataraTheme
 import com.capstone.datara.ui.theme.PrimaryGreen
 
@@ -130,13 +128,13 @@ fun DataraApp(isDarkTheme: Boolean = true, onThemeToggle: (Boolean) -> Unit = {}
     val showBottomBar = bottomBarScreens.any { it.first == currentRoute }
 
     Scaffold(
-        containerColor = DarkBackground,
+        containerColor = MaterialTheme.colorScheme.background,
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState) { data ->
                 Snackbar(
                     snackbarData = data,
-                    containerColor = DarkSurface,
-                    contentColor = Color.White,
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    contentColor = MaterialTheme.colorScheme.onSurface,
                     actionColor = PrimaryGreen
                 )
             }
@@ -144,8 +142,8 @@ fun DataraApp(isDarkTheme: Boolean = true, onThemeToggle: (Boolean) -> Unit = {}
         bottomBar = {
             if (showBottomBar) {
                 NavigationBar(
-                    containerColor = DarkSurface,
-                    contentColor = Color.White
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    contentColor = MaterialTheme.colorScheme.onSurface
                 ) {
                     bottomBarScreens.forEach { (route, icon) ->
                         val label = when (route) {
@@ -166,11 +164,11 @@ fun DataraApp(isDarkTheme: Boolean = true, onThemeToggle: (Boolean) -> Unit = {}
                                 }
                             },
                             colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = DarkSurface,
+                                selectedIconColor = MaterialTheme.colorScheme.surface,
                                 selectedTextColor = PrimaryGreen,
                                 indicatorColor = PrimaryGreen,
-                                unselectedIconColor = Color.Gray,
-                                unselectedTextColor = Color.Gray
+                                unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         )
                     }
@@ -343,7 +341,12 @@ fun DataraApp(isDarkTheme: Boolean = true, onThemeToggle: (Boolean) -> Unit = {}
                     onDeleteAccountClick = { navController.navigate("delete_account") },
                     onCsvManagementClick = { navController.navigate("csv_management") },
                     isDarkMode = isDarkTheme,
-                    onDarkModeToggle = onThemeToggle
+                    onDarkModeToggle = onThemeToggle,
+                    onLogoutClick = {
+                        navController.navigate("login") {
+                            popUpTo(0)
+                        }
+                    }
                 )
             }
 

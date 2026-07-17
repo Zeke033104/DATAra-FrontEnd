@@ -14,8 +14,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.capstone.datara.ui.theme.DarkBackground
-import com.capstone.datara.ui.theme.DarkSurface
 import com.capstone.datara.ui.theme.PrimaryGreen
 
 @Composable
@@ -24,14 +22,15 @@ fun SettingsScreen(
     onDeleteAccountClick: () -> Unit = {},
     onCsvManagementClick: () -> Unit,
     isDarkMode: Boolean = true,
-    onDarkModeToggle: (Boolean) -> Unit = {}
+    onDarkModeToggle: (Boolean) -> Unit = {},
+    onLogoutClick: () -> Unit = {}
 ) {
     var notificationsEnabled by remember { mutableStateOf(true) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(DarkBackground)
+            .background(MaterialTheme.colorScheme.background)
             .padding(24.dp)
     ) {
         Spacer(modifier = Modifier.height(24.dp))
@@ -40,7 +39,7 @@ fun SettingsScreen(
             text = "Settings",
             fontWeight = FontWeight.Bold,
             fontSize = 28.sp,
-            color = Color.White
+            color = MaterialTheme.colorScheme.onBackground
         )
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -70,21 +69,36 @@ fun SettingsScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { onCsvManagementClick() }
-                .background(DarkSurface, RoundedCornerShape(12.dp))
+                .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(12.dp))
                 .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
-                Text("Manage CSV Data", color = Color.White, fontSize = 16.sp)
-                Text("Import / export usage logs", color = Color.Gray, fontSize = 12.sp)
+                Text("Manage CSV Data", color = MaterialTheme.colorScheme.onSurface, fontSize = 16.sp)
+                Text("Import / export usage logs", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
             }
             Icon(
                 imageVector = Icons.Default.KeyboardArrowRight,
                 contentDescription = null,
-                tint = Color.Gray,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(22.dp)
             )
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Button(
+            onClick = onLogoutClick,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = com.capstone.datara.ui.theme.DangerRed
+            ),
+            shape = RoundedCornerShape(12.dp)
+        ) {
+            Text("Logout", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
         }
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -104,23 +118,23 @@ fun SettingsToggleRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(DarkSurface, RoundedCornerShape(12.dp))
+            .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(12.dp))
             .padding(horizontal = 16.dp, vertical = 12.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column {
-            Text(label, color = Color.White, fontSize = 16.sp)
-            Text(description, color = Color.Gray, fontSize = 12.sp)
+            Text(label, color = MaterialTheme.colorScheme.onSurface, fontSize = 16.sp)
+            Text(description, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
         }
         Switch(
             checked = checked,
             onCheckedChange = onCheckedChange,
             colors = SwitchDefaults.colors(
-                checkedThumbColor = Color.White,
-                checkedTrackColor = PrimaryGreen,
-                uncheckedThumbColor = Color.Gray,
-                uncheckedTrackColor = Color(0xFF3A3F55)
+                checkedThumbColor   = Color.White,
+                checkedTrackColor   = PrimaryGreen,
+                uncheckedThumbColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant
             )
         )
     }

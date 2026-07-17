@@ -16,38 +16,48 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
-private val DarkColorScheme = darkColorScheme(
-    primary = PrimaryBlue,
-    secondary = PrimaryGreen,
-    tertiary = BrightGreen,
-    background = DarkBackground,
-    surface = DarkSurface,
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = DarkOnBackground,
-    onSurface = DarkOnSurface,
-    error = DangerRed
+// ── Dark Color Scheme ─────────────────────────────────────────────────────────
+// Matches the reference screenshot: near-black background, dark-gray cards
+private val AppDarkColorScheme = darkColorScheme(
+    primary            = PrimaryBlue,
+    onPrimary          = Color.White,
+    secondary          = PrimaryGreen,
+    onSecondary        = Color.White,
+    tertiary           = BrightGreen,
+    onTertiary         = Color.White,
+    background         = DarkBackground,         // #0F0F0F — page bg
+    onBackground       = DarkOnBackground,       // #FFFFFF — primary text
+    surface            = DarkSurface,            // #1A1A1A — cards
+    onSurface          = DarkOnSurface,          // #FFFFFF — text on card
+    surfaceVariant     = DarkSurfaceVariant,     // #252525 — elevated cards/dialogs
+    onSurfaceVariant   = DarkOnSurfaceVariant,   // #AAAAAA — secondary/muted text
+    outline            = DarkBorder,             // #333333 — borders/dividers
+    error              = DangerRed
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = PrimaryBlue,
-    secondary = PrimaryGreen,
-    tertiary = BrightGreen,
-    background = LightBackground,
-    surface = LightSurface,
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = LightOnBackground,
-    onSurface = LightOnSurface,
-    error = DangerRed
+// ── Light Color Scheme ────────────────────────────────────────────────────────
+// Matches the reference screenshot: light-gray background, white cards
+private val AppLightColorScheme = lightColorScheme(
+    primary            = PrimaryBlue,
+    onPrimary          = Color.White,
+    secondary          = PrimaryGreen,
+    onSecondary        = Color.White,
+    tertiary           = BrightGreen,
+    onTertiary         = Color.White,
+    background         = LightBackground,        // #EBEBEB — page bg
+    onBackground       = LightOnBackground,      // #0D0D0D — primary text
+    surface            = LightSurface,           // #FFFFFF — cards
+    onSurface          = LightOnSurface,         // #0D0D0D — text on card
+    surfaceVariant     = LightSurfaceVariant,    // #F0F0F0 — alt cards
+    onSurfaceVariant   = LightOnSurfaceVariant,  // #666666 — secondary text
+    outline            = Color(0xFFCCCCCC),       // light borders
+    error              = DangerRed
 )
 
 @Composable
 fun DataraTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = false, // Disabled to stick to our custom colors
+    dynamicColor: Boolean = false, // Disabled to keep our custom colors
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -55,21 +65,23 @@ fun DataraTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        darkTheme -> AppDarkColorScheme
+        else      -> AppLightColorScheme
     }
+
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
             window.statusBarColor = colorScheme.background.toArgb()
+            // Light status bar icons for light mode, dark icons for dark mode
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
-        content = content
+        typography  = Typography,
+        content     = content
     )
 }

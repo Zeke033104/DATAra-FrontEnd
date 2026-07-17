@@ -12,17 +12,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.capstone.datara.ui.theme.DarkBackground
-import com.capstone.datara.ui.theme.DarkSurface
 import com.capstone.datara.ui.theme.PrimaryBlue
 import com.capstone.datara.ui.theme.PrimaryGreen
 
 /**
  * Bottom sheet for filtering history logs.
  * Front-end only — no data fetching. Provides Date Range and Data Range pill selectors.
- *
- * @param onApply    Called with the selected (dateRange, dataRange) labels
- * @param onDismiss  Called when the sheet is dismissed
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,21 +33,20 @@ fun FilterBottomSheet(
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
-        containerColor = DarkBackground,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
         dragHandle = {
             // Custom drag handle pill
             Box(
                 modifier = Modifier
                     .padding(vertical = 12.dp)
-                    .size(width = 48.dp, height = 4.dp)
-                    .then(Modifier.padding(0.dp)),
+                    .size(width = 48.dp, height = 4.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Divider(
                     modifier = Modifier.width(48.dp),
                     thickness = 4.dp,
-                    color = Color(0xFF3A3F55)
+                    color = MaterialTheme.colorScheme.outline
                 )
             }
         }
@@ -73,7 +67,7 @@ fun FilterBottomSheet(
                     "Filter Logs",
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 TextButton(onClick = {
                     selectedDate = "Today"
@@ -86,7 +80,7 @@ fun FilterBottomSheet(
             Spacer(modifier = Modifier.height(24.dp))
 
             // Date Range section
-            Text("Date Range", fontWeight = FontWeight.SemiBold, color = Color.White, fontSize = 14.sp)
+            Text("Date Range", fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface, fontSize = 14.sp)
             Spacer(modifier = Modifier.height(12.dp))
             FilterChipRow(
                 options = dateOptions,
@@ -97,7 +91,7 @@ fun FilterBottomSheet(
             Spacer(modifier = Modifier.height(24.dp))
 
             // Data Range section
-            Text("Data Range", fontWeight = FontWeight.SemiBold, color = Color.White, fontSize = 14.sp)
+            Text("Data Range", fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface, fontSize = 14.sp)
             Spacer(modifier = Modifier.height(12.dp))
             FilterChipRow(
                 options = dataOptions,
@@ -172,8 +166,8 @@ fun FilterPill(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val bg = if (isSelected) PrimaryGreen else DarkSurface
-    val textColor = if (isSelected) Color.White else Color.Gray
+    val bg = if (isSelected) PrimaryGreen else MaterialTheme.colorScheme.surface
+    val textColor = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurfaceVariant
 
     Button(
         onClick = onClick,

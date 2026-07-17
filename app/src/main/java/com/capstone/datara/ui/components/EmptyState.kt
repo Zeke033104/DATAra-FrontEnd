@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,10 +18,6 @@ import androidx.compose.ui.unit.sp
 
 /**
  * Reusable empty-state placeholder shown when a list has no content.
- *
- * @param icon       Icon to display (uses a core Material icon)
- * @param title      Bold heading e.g. "No Notifications"
- * @param subtitle   Secondary description text
  */
 @Composable
 fun EmptyState(
@@ -49,7 +46,7 @@ fun EmptyState(
             text = title,
             fontWeight = FontWeight.Bold,
             fontSize = 18.sp,
-            color = Color(0xFF888888),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center
         )
 
@@ -58,7 +55,7 @@ fun EmptyState(
             Text(
                 text = subtitle,
                 fontSize = 13.sp,
-                color = Color(0xFFAAAAAA),
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                 textAlign = TextAlign.Center,
                 lineHeight = 18.sp
             )

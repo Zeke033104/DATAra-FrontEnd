@@ -13,7 +13,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -21,7 +20,6 @@ import androidx.compose.ui.unit.sp
 import com.capstone.datara.R
 import com.capstone.datara.ui.components.CustomTextField
 import com.capstone.datara.ui.components.PrimaryButton
-import com.capstone.datara.ui.theme.DarkBackground
 import com.capstone.datara.ui.theme.PrimaryBlue
 import com.capstone.datara.ui.theme.PrimaryGreen
 
@@ -36,8 +34,6 @@ fun RegisterScreen(
     var phone by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
-
-    // Validation error states (visual only)
     var phoneError by remember { mutableStateOf(false) }
     var passwordError by remember { mutableStateOf(false) }
     var confirmPasswordError by remember { mutableStateOf(false) }
@@ -55,14 +51,12 @@ fun RegisterScreen(
         return !phoneError && !passwordError && !confirmPasswordError
     }
 
-    // Password match indicator (green tick when both match and not empty)
     val passwordsMatch = password.isNotBlank() && confirmPassword.isNotBlank() && password == confirmPassword
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(DarkBackground)
-            // Push content up when keyboard appears
+            .background(MaterialTheme.colorScheme.background)
             .imePadding()
             .padding(horizontal = 32.dp)
             .verticalScroll(rememberScrollState()),
@@ -70,7 +64,6 @@ fun RegisterScreen(
     ) {
         Spacer(modifier = Modifier.height(48.dp))
 
-        // App Logo
         Image(
             painter = painterResource(id = R.drawable.datara_logo),
             contentDescription = "DATAra Logo",
@@ -83,20 +76,21 @@ fun RegisterScreen(
             text = "REGISTER",
             fontWeight = FontWeight.Bold,
             fontSize = 28.sp,
-            color = Color.White
+            color = MaterialTheme.colorScheme.onBackground
         )
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Phone Number
-        Text(text = "Phone Number", color = Color.White, fontSize = 14.sp, modifier = Modifier.fillMaxWidth())
+        Text(
+            text = "Phone Number",
+            color = MaterialTheme.colorScheme.onBackground,
+            fontSize = 14.sp,
+            modifier = Modifier.fillMaxWidth()
+        )
         Spacer(modifier = Modifier.height(8.dp))
         CustomTextField(
             value = phone,
-            onValueChange = {
-                phone = it
-                if (phoneError) phoneError = false
-            },
+            onValueChange = { phone = it; if (phoneError) phoneError = false },
             label = "",
             placeholder = "099xxxxxx",
             leadingIcon = Icons.Default.Phone,
@@ -106,8 +100,12 @@ fun RegisterScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Create Password
-        Text(text = "Create Password", color = Color.White, fontSize = 14.sp, modifier = Modifier.fillMaxWidth())
+        Text(
+            text = "Create Password",
+            color = MaterialTheme.colorScheme.onBackground,
+            fontSize = 14.sp,
+            modifier = Modifier.fillMaxWidth()
+        )
         Spacer(modifier = Modifier.height(8.dp))
         CustomTextField(
             value = password,
@@ -126,13 +124,12 @@ fun RegisterScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Confirm Password — label row with match indicator
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "Confirm Password", color = Color.White, fontSize = 14.sp)
+            Text(text = "Confirm Password", color = MaterialTheme.colorScheme.onBackground, fontSize = 14.sp)
             if (passwordsMatch) {
                 Text("✓ Passwords match", color = PrimaryGreen, fontSize = 12.sp, fontWeight = FontWeight.Medium)
             }
@@ -140,10 +137,7 @@ fun RegisterScreen(
         Spacer(modifier = Modifier.height(8.dp))
         CustomTextField(
             value = confirmPassword,
-            onValueChange = {
-                confirmPassword = it
-                if (confirmPasswordError) confirmPasswordError = false
-            },
+            onValueChange = { confirmPassword = it; if (confirmPasswordError) confirmPasswordError = false },
             label = "",
             placeholder = "********",
             leadingIcon = Icons.Default.Lock,
@@ -154,7 +148,6 @@ fun RegisterScreen(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // Terms and Conditions Checkbox
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
@@ -162,19 +155,15 @@ fun RegisterScreen(
             Checkbox(
                 checked = isTermsAccepted,
                 onCheckedChange = { isChecked ->
-                    if (isChecked) {
-                        onTermsClick()
-                    } else {
-                        onTermsStateChange(false)
-                    }
+                    if (isChecked) onTermsClick() else onTermsStateChange(false)
                 },
                 colors = CheckboxDefaults.colors(
-                    checkedColor = PrimaryGreen,
-                    uncheckedColor = Color.Gray,
-                    checkmarkColor = Color.White
+                    checkedColor   = PrimaryGreen,
+                    uncheckedColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    checkmarkColor = MaterialTheme.colorScheme.onPrimary
                 )
             )
-            Text(text = "Agree to ", color = Color.Gray, fontSize = 14.sp)
+            Text(text = "Agree to ", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
             Text(
                 text = "Terms and Conditions",
                 color = PrimaryBlue,
@@ -185,17 +174,16 @@ fun RegisterScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        PrimaryButton(
-            text = "Register",
-            onClick = {
-                if (validate()) onRegisterClick()
-            }
-        )
+        PrimaryButton(text = "Register", onClick = { if (validate()) onRegisterClick() })
 
         Spacer(modifier = Modifier.height(24.dp))
 
         Row {
-            Text(text = "Already have an account? ", color = Color.Gray, fontSize = 14.sp)
+            Text(
+                text = "Already have an account? ",
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontSize = 14.sp
+            )
             Text(
                 text = "Log In",
                 color = PrimaryBlue,

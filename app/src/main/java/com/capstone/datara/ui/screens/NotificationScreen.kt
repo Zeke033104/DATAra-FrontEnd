@@ -38,13 +38,13 @@ fun NotificationScreen(onBackClick: () -> Unit = {}) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F5F8))
+            .background(MaterialTheme.colorScheme.background)
     ) {
         // ── Header ──────────────────────────────────────────────────────────
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.surface)
                 .padding(horizontal = 16.dp, vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
@@ -53,7 +53,7 @@ fun NotificationScreen(onBackClick: () -> Unit = {}) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = "Back",
-                    tint = Color.Black,
+                    tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier
                         .size(24.dp)
                         .clickable { onBackClick() }
@@ -63,26 +63,22 @@ fun NotificationScreen(onBackClick: () -> Unit = {}) {
                     "Notifications",
                     fontWeight = FontWeight.Bold,
                     fontSize = 22.sp,
-                    color = Color.Black
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.width(6.dp))
                 Icon(
                     imageVector = Icons.Default.Notifications,
                     contentDescription = null,
-                    tint = Color.Black,
+                    tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.size(20.dp)
                 )
             }
-
-            // Mark all as read
             Text(
                 "Mark all as read",
-                color = Color(0xFF6C63FF),
+                color = com.capstone.datara.ui.theme.AccentPurple,
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Medium,
-                modifier = Modifier.clickable {
-                    readSet = notifications.indices.toSet()
-                }
+                modifier = Modifier.clickable { readSet = notifications.indices.toSet() }
             )
         }
 
@@ -92,16 +88,16 @@ fun NotificationScreen(onBackClick: () -> Unit = {}) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color(0xFFF5F5F8))
+                    .background(MaterialTheme.colorScheme.background)
                     .padding(horizontal = 16.dp, vertical = 10.dp)
             ) {
                 Surface(
-                    color = Color(0xFF6C63FF).copy(alpha = 0.12f),
+                    color = com.capstone.datara.ui.theme.AccentPurple.copy(alpha = 0.12f),
                     shape = androidx.compose.foundation.shape.RoundedCornerShape(20.dp)
                 ) {
                     Text(
                         "$unreadCount unread",
-                        color = Color(0xFF6C63FF),
+                        color = com.capstone.datara.ui.theme.AccentPurple,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Medium,
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)

@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -21,11 +20,6 @@ import com.capstone.datara.ui.theme.PrimaryGreen
 /**
  * A single notification row showing an icon, title, body, timestamp,
  * and an unread dot indicator.
- *
- * @param title      Title of the notification
- * @param body       Body/description text
- * @param timestamp  e.g. "2 mins ago", "Yesterday"
- * @param isUnread   Whether to show the unread green dot
  */
 @Composable
 fun NotificationItem(
@@ -34,7 +28,7 @@ fun NotificationItem(
     timestamp: String,
     isUnread: Boolean = true
 ) {
-    val bgColor = if (isUnread) Color(0xFFEEF6FF) else Color.White
+    val bgColor = if (isUnread) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -72,7 +66,7 @@ fun NotificationItem(
                     text = title,
                     fontWeight = if (isUnread) FontWeight.Bold else FontWeight.Normal,
                     fontSize = 14.sp,
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -80,7 +74,7 @@ fun NotificationItem(
                 Text(
                     text = body,
                     fontSize = 12.sp,
-                    color = Color.Gray,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     lineHeight = 16.sp
@@ -89,7 +83,7 @@ fun NotificationItem(
                 Text(
                     text = timestamp,
                     fontSize = 11.sp,
-                    color = Color(0xFF9E9E9E)
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 

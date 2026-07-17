@@ -1,5 +1,6 @@
 package com.capstone.datara.ui.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -7,13 +8,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
 import com.capstone.datara.R
 
 @Composable
@@ -23,7 +22,7 @@ fun DeletedSuccessfullyScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
             .padding(32.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -33,7 +32,7 @@ fun DeletedSuccessfullyScreen(
         Surface(
             modifier = Modifier.size(120.dp),
             shape = RoundedCornerShape(24.dp),
-            color = Color(0xFF13171F)
+            color = MaterialTheme.colorScheme.surfaceVariant
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Image(
@@ -50,7 +49,7 @@ fun DeletedSuccessfullyScreen(
             text = "Your account has been\ndeleted successfully",
             fontWeight = FontWeight.ExtraBold,
             fontSize = 26.sp,
-            color = Color.Black,
+            color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center,
             lineHeight = 36.sp
         )
@@ -59,7 +58,7 @@ fun DeletedSuccessfullyScreen(
 
         Text(
             text = "Thank you for being part of DATAra. We truly appreciate your support and time with us. We hope to see you again in the future.",
-            color = Color(0xFF9E9E9E),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             fontSize = 14.sp,
             textAlign = TextAlign.Center,
             lineHeight = 22.sp
@@ -73,9 +72,14 @@ fun DeletedSuccessfullyScreen(
                 .fillMaxWidth()
                 .height(58.dp),
             shape = RoundedCornerShape(30.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onBackground)
         ) {
-            Text("Back to login", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+            Text(
+                "Back to login",
+                color = MaterialTheme.colorScheme.background,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Medium
+            )
         }
 
         Spacer(modifier = Modifier.height(32.dp))
