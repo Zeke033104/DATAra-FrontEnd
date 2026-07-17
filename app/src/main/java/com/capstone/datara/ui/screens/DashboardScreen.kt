@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.capstone.datara.ui.components.TopAppBarDark
+import com.capstone.datara.ui.components.NotificationPermissionDialog
 import com.capstone.datara.ui.theme.PrimaryBlue
 import com.capstone.datara.ui.theme.PrimaryGreen
 import kotlinx.coroutines.delay
@@ -28,6 +29,10 @@ fun DashboardScreen(
     onProfileClick: () -> Unit = {}
 ) {
     // ── Animation triggers ────────────────────────────────────────────
+    // Notification permission dialog — shown once on first load after a short delay
+    var showNotifDialog by remember { mutableStateOf(false) }
+
+    // Card stagger visibility
     var card1Visible by remember { mutableStateOf(false) }
     var card2Visible by remember { mutableStateOf(false) }
     var card3Visible by remember { mutableStateOf(false) }
@@ -56,6 +61,18 @@ fun DashboardScreen(
         card3Visible = true
         delay(150)
         card4Visible = true
+        // Show notification permission dialog 800ms after cards appear
+        delay(800)
+        showNotifDialog = true
+    }
+
+    // ── Notification Permission Dialog ────────────────────────────────────
+    if (showNotifDialog) {
+        NotificationPermissionDialog(
+            onAllowClick = { showNotifDialog = false },
+            onDenyClick = { showNotifDialog = false },
+            onDismiss = { showNotifDialog = false }
+        )
     }
 
     Column(

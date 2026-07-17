@@ -12,7 +12,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.capstone.datara.ui.components.EditFieldDialog
 
 @Composable
 fun ProfileScreen(
@@ -27,6 +28,37 @@ fun ProfileScreen(
     onDeleteAccountClick: () -> Unit = {},
     onSettingsClick: () -> Unit = {}
 ) {
+    // Editable field states (mock data — no backend)
+    var name by remember { mutableStateOf("Charlie C. Omongos") }
+    var email by remember { mutableStateOf("Omongos.charlie@example.com") }
+    var address by remember { mutableStateOf("California Cogon City") }
+
+    // Which field dialog is currently open (null = none)
+    var editingField by remember { mutableStateOf<String?>(null) }
+
+    // Show edit dialog when a field is tapped
+    if (editingField != null) {
+        val currentValue = when (editingField) {
+            "NAME" -> name
+            "EMAIL" -> email
+            "ADDRESS" -> address
+            else -> ""
+        }
+        EditFieldDialog(
+            fieldLabel = editingField!!,
+            currentValue = currentValue,
+            onSave = { newValue ->
+                when (editingField) {
+                    "NAME" -> name = newValue
+                    "EMAIL" -> email = newValue
+                    "ADDRESS" -> address = newValue
+                }
+                editingField = null
+            },
+            onDismiss = { editingField = null }
+        )
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -58,12 +90,14 @@ fun ProfileScreen(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .size(22.dp)
-                    .clickable { }
+                    .clickable { editingField = "NAME" }
             )
 
             // Avatar + label centered
             Column(
-                modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 // Profile picture circle
@@ -80,9 +114,16 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Text(
-                    text = "PROFILE PHOTO",
+                    text = name,
                     color = Color.White,
-                    fontSize = 13.sp,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(
+                    text = "PROFILE PHOTO",
+                    color = Color.Gray,
+                    fontSize = 11.sp,
                     fontWeight = FontWeight.Medium,
                     letterSpacing = 1.sp
                 )
@@ -98,11 +139,12 @@ fun ProfileScreen(
         ) {
             Spacer(modifier = Modifier.height(28.dp))
 
-            // Phone Number (no chevron — read only)
+            // Phone Number (read-only — no chevron)
             ProfileField(
                 label = "PHONE NUMBER",
                 value = "+6308312035",
-                clickable = false
+                clickable = false,
+                onClick = {}
             )
 
             Divider(color = Color(0xFFEEEEEE), thickness = 1.dp)
@@ -110,8 +152,9 @@ fun ProfileScreen(
             // Name (editable)
             ProfileField(
                 label = "NAME",
-                value = "Charlie C. Omongos",
-                clickable = true
+                value = name,
+                clickable = true,
+                onClick = { editingField = "NAME" }
             )
 
             Divider(color = Color(0xFFEEEEEE), thickness = 1.dp)
@@ -119,8 +162,9 @@ fun ProfileScreen(
             // Email (editable)
             ProfileField(
                 label = "EMAIL",
-                value = "Omongos.charlie@example.com",
-                clickable = true
+                value = email,
+                clickable = true,
+                onClick = { editingField = "EMAIL" }
             )
 
             Divider(color = Color(0xFFEEEEEE), thickness = 1.dp)
@@ -128,8 +172,9 @@ fun ProfileScreen(
             // Address (editable)
             ProfileField(
                 label = "ADDRESS",
-                value = "California Cogon City",
-                clickable = true
+                value = address,
+                clickable = true,
+                onClick = { editingField = "ADDRESS" }
             )
 
             Spacer(modifier = Modifier.height(40.dp))
@@ -158,11 +203,16 @@ fun ProfileScreen(
 }
 
 @Composable
-fun ProfileField(label: String, value: String, clickable: Boolean) {
+fun ProfileField(
+    label: String,
+    value: String,
+    clickable: Boolean,
+    onClick: () -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .then(if (clickable) Modifier.clickable { } else Modifier)
+            .then(if (clickable) Modifier.clickable { onClick() } else Modifier)
             .padding(vertical = 20.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
