@@ -62,31 +62,28 @@ fun ProfileScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         // ── Dark Top Section ─────────────────────────────────────────────────
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xFF13171F))
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(top = 20.dp, bottom = 32.dp, start = 16.dp, end = 16.dp)
         ) {
-            // Back arrow top-left
             Icon(
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = "Back",
-                tint = Color.White,
+                tint = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier
                     .align(Alignment.TopStart)
                     .size(24.dp)
                     .clickable { onBackClick() }
             )
-
-            // Edit icon top-right
             Icon(
                 imageVector = Icons.Default.Edit,
                 contentDescription = "Edit Profile",
-                tint = Color.White,
+                tint = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .size(22.dp)
@@ -115,14 +112,14 @@ fun ProfileScreen(
 
                 Text(
                     text = name,
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = "PROFILE PHOTO",
-                    color = Color.Gray,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 11.sp,
                     fontWeight = FontWeight.Medium,
                     letterSpacing = 1.sp
@@ -147,7 +144,7 @@ fun ProfileScreen(
                 onClick = {}
             )
 
-            Divider(color = Color(0xFFEEEEEE), thickness = 1.dp)
+            Divider(color = MaterialTheme.colorScheme.outline, thickness = 1.dp)
 
             // Name (editable)
             ProfileField(
@@ -158,7 +155,6 @@ fun ProfileScreen(
             )
 
             Divider(color = Color(0xFFEEEEEE), thickness = 1.dp)
-
             // Email (editable)
             ProfileField(
                 label = "EMAIL",
@@ -168,7 +164,7 @@ fun ProfileScreen(
             )
 
             Divider(color = Color(0xFFEEEEEE), thickness = 1.dp)
-
+            
             // Address (editable)
             ProfileField(
                 label = "ADDRESS",
@@ -183,13 +179,13 @@ fun ProfileScreen(
             Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                 Button(
                     onClick = onDeleteAccountClick,
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD32F2F)),
+                    colors = ButtonDefaults.buttonColors(containerColor = com.capstone.datara.ui.theme.DangerRed),
                     shape = RoundedCornerShape(20.dp),
                     contentPadding = PaddingValues(horizontal = 32.dp, vertical = 10.dp)
                 ) {
                     Text(
                         "DELETE ACCOUNT",
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 0.5.sp
@@ -222,20 +218,20 @@ fun ProfileField(
                 text = label,
                 fontSize = 13.sp,
                 fontWeight = FontWeight.ExtraBold,
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onBackground
             )
             Spacer(modifier = Modifier.height(6.dp))
             Text(
                 text = value,
                 fontSize = 15.sp,
-                color = Color(0xFF555555)
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
         if (clickable) {
             Icon(
                 imageVector = Icons.Default.KeyboardArrowRight,
                 contentDescription = null,
-                tint = Color.Black,
+                tint = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.size(22.dp)
             )
         }

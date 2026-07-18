@@ -11,21 +11,17 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.material3.MaterialTheme
 import com.capstone.datara.R
-import com.capstone.datara.ui.theme.DarkBackground
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
 fun SplashScreen(onNavigateToLogin: () -> Unit) {
-
-    // Animate alpha: 0 → 1 over 800ms
     val alpha = remember { Animatable(0f) }
-    // Animate scale: 0.7 → 1.0 over 900ms with overshoot spring
     val scale = remember { Animatable(0.7f) }
 
     LaunchedEffect(Unit) {
-        // Run both animations simultaneously
         launch {
             alpha.animateTo(
                 targetValue = 1f,
@@ -41,7 +37,6 @@ fun SplashScreen(onNavigateToLogin: () -> Unit) {
                 )
             )
         }
-        // Hold for total of 2.5 seconds then navigate
         delay(2500L)
         onNavigateToLogin()
     }
@@ -49,7 +44,8 @@ fun SplashScreen(onNavigateToLogin: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(DarkBackground),
+            // Always use pure dark for splash regardless of theme (brand identity)
+            .background(com.capstone.datara.ui.theme.DarkBackground),
         contentAlignment = Alignment.Center
     ) {
         Image(

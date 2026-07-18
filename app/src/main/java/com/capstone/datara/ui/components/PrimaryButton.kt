@@ -31,13 +31,6 @@ import androidx.compose.ui.unit.sp
  * A primary button that supports an optional loading state.
  * When [isLoading] is true, the text is replaced with a spinner.
  * The button is disabled while loading to prevent double-taps.
- *
- * @param text          Button label text
- * @param onClick       Action on tap (not called when loading)
- * @param isLoading     Whether to show the spinner
- * @param modifier      Optional modifier override
- * @param backgroundColor Button fill color
- * @param contentColor  Text/icon color
  */
 @Composable
 fun PrimaryButton(
@@ -46,7 +39,7 @@ fun PrimaryButton(
     isLoading: Boolean = false,
     modifier: Modifier = Modifier,
     backgroundColor: Color = MaterialTheme.colorScheme.primary,
-    contentColor: Color = Color.White
+    contentColor: Color = MaterialTheme.colorScheme.onPrimary
 ) {
     Button(
         onClick = { if (!isLoading) onClick() },

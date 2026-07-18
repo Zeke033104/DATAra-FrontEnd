@@ -11,14 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 /**
- * Shared dark top app bar used across Dashboard, History, and future screens.
- * Shows the carrier badge, phone number, notification bell, and user avatar.
+ * Shared top app bar used across Dashboard, History, and future screens.
+ * Fully theme-aware: adapts to dark and light mode automatically.
  */
 @Composable
 fun TopAppBarDark(
@@ -30,11 +29,7 @@ fun TopAppBarDark(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .then(
-                Modifier.windowInsetsPadding(
-                    WindowInsets.statusBars
-                )
-            )
+            .windowInsetsPadding(WindowInsets.statusBars)
             .padding(horizontal = 16.dp, vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
@@ -42,19 +37,23 @@ fun TopAppBarDark(
         // Left: carrier badge + phone number
         Row(verticalAlignment = Alignment.CenterVertically) {
             Surface(
-                color = Color.DarkGray,
+                color = MaterialTheme.colorScheme.surfaceVariant,
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier.padding(end = 12.dp)
             ) {
                 Text(
                     text = carrierLabel,
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
                     fontWeight = FontWeight.Bold,
                     fontSize = 13.sp
                 )
             }
-            Text(phoneNumber, color = Color.White, fontSize = 16.sp)
+            Text(
+                text = phoneNumber,
+                color = MaterialTheme.colorScheme.onBackground,
+                fontSize = 16.sp
+            )
         }
 
         // Right: bell + avatar
@@ -65,7 +64,7 @@ fun TopAppBarDark(
             Icon(
                 imageVector = Icons.Default.Notifications,
                 contentDescription = "Notifications",
-                tint = Color.White,
+                tint = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
                     .size(24.dp)
                     .clickable { onNotificationClick() }
@@ -75,10 +74,14 @@ fun TopAppBarDark(
                     .size(38.dp)
                     .clip(CircleShape)
                     .clickable { onProfileClick() },
-                color = Color(0xFF3A3F55)
+                color = MaterialTheme.colorScheme.surfaceVariant
             ) {
                 Box(contentAlignment = Alignment.Center) {
-                    Text("U", color = Color.White, fontWeight = FontWeight.Bold)
+                    Text(
+                        text = "U",
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
             }
         }

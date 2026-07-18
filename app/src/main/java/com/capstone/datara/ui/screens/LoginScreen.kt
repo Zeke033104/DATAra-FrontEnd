@@ -14,7 +14,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -22,7 +21,6 @@ import androidx.compose.ui.unit.sp
 import com.capstone.datara.R
 import com.capstone.datara.ui.components.PrimaryButton
 import com.capstone.datara.ui.components.CustomTextField
-import com.capstone.datara.ui.theme.DarkBackground
 import com.capstone.datara.ui.theme.PrimaryBlue
 
 @Composable
@@ -33,8 +31,6 @@ fun LoginScreen(
 ) {
     var phone by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-
-    // Validation error states (visual only)
     var phoneError by remember { mutableStateOf(false) }
     var passwordError by remember { mutableStateOf(false) }
 
@@ -47,8 +43,7 @@ fun LoginScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(DarkBackground)
-            // Push content up when keyboard appears
+            .background(MaterialTheme.colorScheme.background)
             .imePadding()
             .padding(horizontal = 32.dp)
             .verticalScroll(rememberScrollState()),
@@ -56,7 +51,6 @@ fun LoginScreen(
     ) {
         Spacer(modifier = Modifier.height(80.dp))
 
-        // App Logo
         Image(
             painter = painterResource(id = R.drawable.datara_logo),
             contentDescription = "DATAra Logo",
@@ -69,25 +63,21 @@ fun LoginScreen(
             text = "LOGIN",
             fontWeight = FontWeight.Bold,
             fontSize = 28.sp,
-            color = Color.White
+            color = MaterialTheme.colorScheme.onBackground
         )
 
         Spacer(modifier = Modifier.height(40.dp))
 
-        // Phone Number
         Text(
             text = "Phone Number",
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onBackground,
             fontSize = 14.sp,
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(8.dp))
         CustomTextField(
             value = phone,
-            onValueChange = {
-                phone = it
-                if (phoneError) phoneError = false
-            },
+            onValueChange = { phone = it; if (phoneError) phoneError = false },
             label = "",
             placeholder = "099xxxxxx",
             leadingIcon = Icons.Default.Phone,
@@ -97,12 +87,15 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Password row header
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = "Password", color = Color.White, fontSize = 14.sp)
+            Text(
+                text = "Password",
+                color = MaterialTheme.colorScheme.onBackground,
+                fontSize = 14.sp
+            )
             Text(
                 text = "Forget Password",
                 color = PrimaryBlue,
@@ -113,10 +106,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(8.dp))
         CustomTextField(
             value = password,
-            onValueChange = {
-                password = it
-                if (passwordError) passwordError = false
-            },
+            onValueChange = { password = it; if (passwordError) passwordError = false },
             label = "",
             placeholder = "********",
             leadingIcon = Icons.Default.Lock,
@@ -127,17 +117,16 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(40.dp))
 
-        PrimaryButton(
-            text = "Login",
-            onClick = {
-                if (validate()) onLoginClick()
-            }
-        )
+        PrimaryButton(text = "Login", onClick = { if (validate()) onLoginClick() })
 
         Spacer(modifier = Modifier.height(24.dp))
 
         Row {
-            Text(text = "Don't have an account? ", color = Color.Gray, fontSize = 14.sp)
+            Text(
+                text = "Don't have an account? ",
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontSize = 14.sp
+            )
             Text(
                 text = "Sign up",
                 color = PrimaryBlue,

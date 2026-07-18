@@ -23,10 +23,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.capstone.datara.ui.components.EmptyState
 import com.capstone.datara.ui.components.PrimaryButton
-import com.capstone.datara.ui.theme.DarkBackground
-import com.capstone.datara.ui.theme.DarkSurface
 import com.capstone.datara.ui.theme.PrimaryBlue
 import com.capstone.datara.ui.theme.PrimaryGreen
+import com.capstone.datara.ui.theme.DangerRed
 
 // Mock CSV file data model
 data class CsvFile(
@@ -89,18 +88,18 @@ fun CsvManagementScreen(
     if (fileToDelete != null) {
         AlertDialog(
             onDismissRequest = { fileToDelete = null },
-            containerColor = Color(0xFF1E2233),
+            containerColor = MaterialTheme.colorScheme.surface,
             title = {
                 Text(
                     "Delete File",
                     fontWeight = FontWeight.Bold,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             },
             text = {
                 Text(
                     "Are you sure you want to delete \"${fileToDelete!!.name}\"? This cannot be undone.",
-                    color = Color.Gray,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 14.sp
                 )
             },
@@ -111,7 +110,7 @@ fun CsvManagementScreen(
                         fileToDelete = null
                         onDeleteComplete()
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD32F2F)),
+                    colors = ButtonDefaults.buttonColors(containerColor = DangerRed),
                     shape = RoundedCornerShape(20.dp)
                 ) {
                     Text("Delete", color = Color.White, fontWeight = FontWeight.Bold)
@@ -121,9 +120,9 @@ fun CsvManagementScreen(
                 OutlinedButton(
                     onClick = { fileToDelete = null },
                     shape = RoundedCornerShape(20.dp),
-                    border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF3A3F55))
+                    border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
                 ) {
-                    Text("Cancel", color = Color.Gray)
+                    Text("Cancel", color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
         )
@@ -132,20 +131,20 @@ fun CsvManagementScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(DarkBackground)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         // ── Header ──────────────────────────────────────────────────────────
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xFF13171F))
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(horizontal = 20.dp, vertical = 20.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = "Back",
-                tint = Color.White,
+                tint = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier
                     .size(24.dp)
                     .clickable { onBackClick() }
@@ -156,11 +155,11 @@ fun CsvManagementScreen(
                     "CSV Management",
                     fontWeight = FontWeight.Bold,
                     fontSize = 22.sp,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     "Import and export data usage logs",
-                    color = Color.Gray,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 12.sp
                 )
             }
@@ -226,7 +225,7 @@ fun CsvManagementScreen(
             }
         }
 
-        Divider(color = Color(0xFF2A2F45), thickness = 1.dp)
+        Divider(color = MaterialTheme.colorScheme.outlineVariant, thickness = 1.dp)
 
         // ── File List ──────────────────────────────────────────────────────
         Row(
@@ -240,11 +239,11 @@ fun CsvManagementScreen(
                 "Saved Files",
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
-                color = Color.White
+                color = MaterialTheme.colorScheme.onBackground
             )
             Text(
                 "${csvFiles.size} file${if (csvFiles.size != 1) "s" else ""}",
-                color = Color.Gray,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontSize = 13.sp
             )
         }
@@ -253,8 +252,7 @@ fun CsvManagementScreen(
             EmptyState(
                 icon = Icons.Default.List,
                 title = "No CSV Files Yet",
-                subtitle = "Export your data logs or import an existing CSV file to get started.",
-                iconTint = Color(0xFF3A3F55)
+                subtitle = "Export your data logs or import an existing CSV file to get started."
             )
         } else {
             LazyColumn(
@@ -283,7 +281,7 @@ private fun CsvFileRow(
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(containerColor = DarkSurface),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
         Row(
@@ -308,7 +306,7 @@ private fun CsvFileRow(
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = file.name,
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Medium,
                     fontSize = 14.sp,
                     maxLines = 1,
@@ -317,7 +315,7 @@ private fun CsvFileRow(
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = "${file.size}  ·  ${file.date}",
-                    color = Color.Gray,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 12.sp
                 )
             }
@@ -329,7 +327,7 @@ private fun CsvFileRow(
                 Icon(
                     imageVector = Icons.Default.Delete,
                     contentDescription = "Delete ${file.name}",
-                    tint = Color(0xFFFF4444),
+                    tint = DangerRed,
                     modifier = Modifier.size(20.dp)
                 )
             }
