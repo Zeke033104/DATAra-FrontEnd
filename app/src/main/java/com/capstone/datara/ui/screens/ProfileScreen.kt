@@ -144,7 +144,7 @@ fun ProfileScreen(
                 onClick = {}
             )
 
-            Divider(color = MaterialTheme.colorScheme.outline, thickness = 1.dp)
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant, thickness = 1.dp)
 
             // Name (editable)
             ProfileField(
@@ -154,7 +154,7 @@ fun ProfileScreen(
                 onClick = { editingField = "NAME" }
             )
 
-            Divider(color = Color(0xFFEEEEEE), thickness = 1.dp)
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant, thickness = 1.dp)
             // Email (editable)
             ProfileField(
                 label = "EMAIL",
@@ -163,7 +163,7 @@ fun ProfileScreen(
                 onClick = { editingField = "EMAIL" }
             )
 
-            Divider(color = Color(0xFFEEEEEE), thickness = 1.dp)
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant, thickness = 1.dp)
             
             // Address (editable)
             ProfileField(
