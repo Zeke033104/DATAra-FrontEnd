@@ -17,12 +17,21 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -30,6 +39,7 @@ import androidx.navigation.compose.rememberNavController
 import com.capstone.datara.ui.screens.AccountRecoveryScreen
 import com.capstone.datara.ui.screens.CsvManagementScreen
 import com.capstone.datara.ui.screens.DashboardScreen
+import com.capstone.datara.ui.screens.SplashScreen
 import com.capstone.datara.ui.screens.DeleteAccountScreen
 import com.capstone.datara.ui.screens.DeletedSuccessfullyScreen
 import com.capstone.datara.ui.screens.ForgetPassword
@@ -41,8 +51,6 @@ import com.capstone.datara.ui.screens.ProfileScreen
 import com.capstone.datara.ui.screens.RegisterScreen
 import com.capstone.datara.ui.screens.SettingsScreen
 import com.capstone.datara.ui.screens.TermsAndConditionsScreen
-import com.capstone.datara.ui.theme.DarkBackground
-import com.capstone.datara.ui.theme.DarkSurface
 import com.capstone.datara.ui.theme.DataraTheme
 import com.capstone.datara.ui.theme.PrimaryGreen
 
@@ -50,63 +58,67 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            DataraTheme(darkTheme = true) {
+            // isDarkTheme is lifted here so Settings toggle affects the whole app
+            var isDarkTheme by remember { mutableStateOf(true) }
+            DataraTheme(darkTheme = isDarkTheme) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    DataraApp()
+                    DataraApp(isDarkTheme = isDarkTheme, onThemeToggle = { isDarkTheme = it })
                 }
             }
         }
     }
 }
 
-// ── Reusable transition specs ────────────────────────────────────────────────
-private const val ANIM_DURATION = 350
+// ── Reusable transition specs ─────────────────────────────────────────────────
+private const val ANIM_DURATION = 320
 
 // Forward navigation: slide in from right + fade in
 private fun forwardEnter(): EnterTransition =
-    slideInHorizontally(animationSpec = tween(ANIM_DURATION)) { it / 3 } +
+    slideInHorizontally(animationSpec = tween(ANIM_DURATION, easing = androidx.compose.animation.core.FastOutSlowInEasing)) { it / 4 } +
     fadeIn(animationSpec = tween(ANIM_DURATION))
 
-// Forward navigation: the old screen slides out left + fades out
+// Forward navigation: old screen slides out left + fades out
 private fun forwardExit(): ExitTransition =
-    slideOutHorizontally(animationSpec = tween(ANIM_DURATION)) { -it / 3 } +
+    slideOutHorizontally(animationSpec = tween(ANIM_DURATION, easing = androidx.compose.animation.core.FastOutSlowInEasing)) { -it / 4 } +
     fadeOut(animationSpec = tween(ANIM_DURATION))
 
 // Pop (back) navigation: slide in from left + fade in
 private fun popEnter(): EnterTransition =
-    slideInHorizontally(animationSpec = tween(ANIM_DURATION)) { -it / 3 } +
+    slideInHorizontally(animationSpec = tween(ANIM_DURATION, easing = androidx.compose.animation.core.FastOutSlowInEasing)) { -it / 4 } +
     fadeIn(animationSpec = tween(ANIM_DURATION))
 
 // Pop (back) navigation: old screen slides out right + fades out
 private fun popExit(): ExitTransition =
-    slideOutHorizontally(animationSpec = tween(ANIM_DURATION)) { it / 3 } +
+    slideOutHorizontally(animationSpec = tween(ANIM_DURATION, easing = androidx.compose.animation.core.FastOutSlowInEasing)) { it / 4 } +
     fadeOut(animationSpec = tween(ANIM_DURATION))
 
 // Bottom sheet style: slide up + fade in
 private fun slideUpEnter(): EnterTransition =
-    slideInVertically(animationSpec = tween(ANIM_DURATION)) { it / 2 } +
-    fadeIn(animationSpec = tween(ANIM_DURATION))
+    slideInVertically(animationSpec = tween(380, easing = androidx.compose.animation.core.FastOutSlowInEasing)) { it / 2 } +
+    fadeIn(animationSpec = tween(300))
 
 // Bottom sheet style exit: slide down + fade out
 private fun slideDownExit(): ExitTransition =
-    slideOutVertically(animationSpec = tween(ANIM_DURATION)) { it / 2 } +
-    fadeOut(animationSpec = tween(ANIM_DURATION))
+    slideOutVertically(animationSpec = tween(280, easing = androidx.compose.animation.core.LinearOutSlowInEasing)) { it / 2 } +
+    fadeOut(animationSpec = tween(220))
 
-// Tab cross-fade for bottom nav
+// Tab cross-fade for bottom nav (slightly slower for perceived stability)
 private fun tabEnter(): EnterTransition =
-    fadeIn(animationSpec = tween(300))
+    fadeIn(animationSpec = tween(250, easing = androidx.compose.animation.core.LinearEasing))
 
 private fun tabExit(): ExitTransition =
-    fadeOut(animationSpec = tween(300))
+    fadeOut(animationSpec = tween(180, easing = androidx.compose.animation.core.LinearEasing))
 
 @Composable
-fun DataraApp() {
+fun DataraApp(isDarkTheme: Boolean = true, onThemeToggle: (Boolean) -> Unit = {}) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
     val bottomBarScreens = listOf(
         "dashboard" to Icons.Default.Home,
@@ -116,16 +128,33 @@ fun DataraApp() {
     val showBottomBar = bottomBarScreens.any { it.first == currentRoute }
 
     Scaffold(
-        containerColor = DarkBackground,
+        containerColor = MaterialTheme.colorScheme.background,
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState) { data ->
+                Snackbar(
+                    snackbarData = data,
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    contentColor = MaterialTheme.colorScheme.onSurface,
+                    actionColor = PrimaryGreen
+                )
+            }
+        },
         bottomBar = {
             if (showBottomBar) {
                 NavigationBar(
-                    containerColor = DarkSurface,
-                    contentColor = Color.White
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    contentColor = MaterialTheme.colorScheme.onSurface
                 ) {
                     bottomBarScreens.forEach { (route, icon) ->
+                        val label = when (route) {
+                            "dashboard" -> "Home"
+                            "history" -> "History"
+                            "settings" -> "Settings"
+                            else -> route
+                        }
                         NavigationBarItem(
-                            icon = { Icon(icon, contentDescription = route) },
+                            icon = { Icon(icon, contentDescription = label) },
+                            label = { androidx.compose.material3.Text(label, fontSize = 11.sp) },
                             selected = currentRoute == route,
                             onClick = {
                                 navController.navigate(route) {
@@ -135,11 +164,11 @@ fun DataraApp() {
                                 }
                             },
                             colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = DarkSurface,
+                                selectedIconColor = MaterialTheme.colorScheme.surface,
                                 selectedTextColor = PrimaryGreen,
                                 indicatorColor = PrimaryGreen,
-                                unselectedIconColor = Color.Gray,
-                                unselectedTextColor = Color.Gray
+                                unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         )
                     }
@@ -149,7 +178,7 @@ fun DataraApp() {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = "login",
+            startDestination = "splash",
             modifier = Modifier.padding(innerPadding),
             // Default transitions for all routes
             enterTransition = { forwardEnter() },
@@ -157,6 +186,21 @@ fun DataraApp() {
             popEnterTransition = { popEnter() },
             popExitTransition = { popExit() }
         ) {
+            // ── SPLASH ──────────────────────────────────────────────────────
+            composable(
+                "splash",
+                enterTransition = { fadeIn(animationSpec = tween(300)) },
+                exitTransition = { fadeOut(animationSpec = tween(300)) }
+            ) {
+                SplashScreen(
+                    onNavigateToLogin = {
+                        navController.navigate("login") {
+                            popUpTo("splash") { inclusive = true }
+                        }
+                    }
+                )
+            }
+
             // ── AUTHENTICATION FLOW ─────────────────────────────────────────
             composable(
                 "login",
@@ -167,6 +211,7 @@ fun DataraApp() {
             ) {
                 LoginScreen(
                     onLoginClick = {
+                        scope.launch { snackbarHostState.showSnackbar("Welcome back! Logging you in…") }
                         navController.navigate("dashboard") {
                             popUpTo("login") { inclusive = true }
                         }
@@ -182,6 +227,7 @@ fun DataraApp() {
                     isTermsAccepted = isTermsAccepted,
                     onTermsStateChange = { backStackEntry.savedStateHandle["terms_accepted"] = it },
                     onRegisterClick = {
+                        scope.launch { snackbarHostState.showSnackbar("Account created! Please log in.") }
                         navController.navigate("login") { popUpTo("login") { inclusive = true } }
                     },
                     onLoginClick = { navController.popBackStack() },
@@ -293,7 +339,14 @@ fun DataraApp() {
                 SettingsScreen(
                     onBackClick = { navController.popBackStack() },
                     onDeleteAccountClick = { navController.navigate("delete_account") },
-                    onCsvManagementClick = { navController.navigate("csv_management") }
+                    onCsvManagementClick = { navController.navigate("csv_management") },
+                    isDarkMode = isDarkTheme,
+                    onDarkModeToggle = onThemeToggle,
+                    onLogoutClick = {
+                        navController.navigate("login") {
+                            popUpTo(0)
+                        }
+                    }
                 )
             }
 
@@ -321,7 +374,10 @@ fun DataraApp() {
 
             composable("csv_management") {
                 CsvManagementScreen(
-                    onBackClick = { navController.popBackStack() }
+                    onBackClick = { navController.popBackStack() },
+                    onExportComplete = { scope.launch { snackbarHostState.showSnackbar("✓ CSV exported successfully!") } },
+                    onImportComplete = { scope.launch { snackbarHostState.showSnackbar("✓ CSV imported successfully!") } },
+                    onDeleteComplete = { scope.launch { snackbarHostState.showSnackbar("File deleted.") } }
                 )
             }
         }

@@ -9,7 +9,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -23,6 +22,8 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.capstone.datara.ui.components.TopAppBarDark
+import com.capstone.datara.ui.components.FilterBottomSheet
 import com.capstone.datara.ui.theme.PrimaryBlue
 
 @Composable
@@ -32,51 +33,29 @@ fun HistoryScreen(
 ) {
     var selectedTab by remember { mutableStateOf("Daily") }
     val tabs = listOf("Daily", "Weekly", "Monthly")
+    var showFilterSheet by remember { mutableStateOf(false) }
+    var activeFilter by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF0F0F5))
+            .background(MaterialTheme.colorScheme.background)
     ) {
-        // Top App Bar
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color(0xFF1A1C23))
-                .padding(horizontal = 16.dp, vertical = 20.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Surface(
-                    color = Color.DarkGray,
-                    shape = RoundedCornerShape(8.dp),
-                    modifier = Modifier.padding(end = 12.dp)
-                ) {
-                    Text(
-                        "TM", color = Color.White,
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-                Text("+6308312035", color = Color.White, fontSize = 16.sp)
-            }
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Icon(
-                    Icons.Default.Notifications,
-                    contentDescription = "Notifications",
-                    tint = Color.White,
-                    modifier = Modifier.size(24.dp).clickable { onNotificationClick() }
-                )
-                Surface(
-                    modifier = Modifier.size(38.dp).clip(CircleShape).clickable { onProfileClick() },
-                    color = Color(0xFF3A3F55)
-                ) {
-                    Box(contentAlignment = Alignment.Center) {
-                        Text("U", color = Color.White, fontWeight = FontWeight.Bold)
-                    }
-                }
-            }
+        // Top App Bar — shared component
+        TopAppBarDark(
+            onNotificationClick = onNotificationClick,
+            onProfileClick = onProfileClick
+        )
+
+        // ── Filter Bottom Sheet ──────────────────────────────────────────
+        if (showFilterSheet) {
+            FilterBottomSheet(
+                onApply = { dateRange, dataRange ->
+                    activeFilter = "$dateRange · $dataRange"
+                    showFilterSheet = false
+                },
+                onDismiss = { showFilterSheet = false }
+            )
         }
 
         Column(
@@ -91,12 +70,20 @@ fun HistoryScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("HISTORY", fontWeight = FontWeight.ExtraBold, fontSize = 26.sp, color = Color.Black)
-                Row {
-                    IconButton(onClick = {}) {
-                        Icon(Icons.Default.Settings, contentDescription = "Filter", tint = Color.Black)
-                    }
+                Text("HISTORY", fontWeight = FontWeight.ExtraBold, fontSize = 26.sp, color = MaterialTheme.colorScheme.onBackground)
+                IconButton(onClick = { showFilterSheet = true }) {
+                    Icon(Icons.Default.Settings, contentDescription = "Filter", tint = MaterialTheme.colorScheme.onBackground)
                 }
+            }
+
+            // Active filter indicator
+            if (activeFilter.isNotBlank()) {
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    "Filtered: $activeFilter",
+                    color = com.capstone.datara.ui.theme.PrimaryBlue,
+                    fontSize = 12.sp
+                )
             }
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -104,7 +91,7 @@ fun HistoryScreen(
             // Chart Card with Line Graph
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                 shape = RoundedCornerShape(12.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
@@ -115,16 +102,16 @@ fun HistoryScreen(
                         verticalAlignment = Alignment.Top
                     ) {
                         Column {
-                            Text("TOTAL THIS DAY", color = Color.Gray, fontSize = 11.sp, fontWeight = FontWeight.Medium)
+                            Text("TOTAL THIS DAY", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 11.sp, fontWeight = FontWeight.Medium)
                             Row(verticalAlignment = Alignment.Bottom) {
-                                Text("25.00", fontWeight = FontWeight.Bold, fontSize = 28.sp, color = Color.Black)
-                                Text(" GB", fontSize = 14.sp, color = Color.Gray, modifier = Modifier.padding(bottom = 4.dp))
+                                Text("25.00", fontWeight = FontWeight.Bold, fontSize = 28.sp, color = MaterialTheme.colorScheme.onSurface)
+                                Text(" GB", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(bottom = 4.dp))
                             }
                         }
                         // Tab selector
                         Row(
                             modifier = Modifier
-                                .background(Color(0xFFF0F0F5), RoundedCornerShape(20.dp))
+                                .background(MaterialTheme.colorScheme.background, RoundedCornerShape(20.dp))
                                 .padding(4.dp)
                         ) {
                             tabs.forEach { tab ->
@@ -133,12 +120,12 @@ fun HistoryScreen(
                                     modifier = Modifier
                                         .clip(RoundedCornerShape(16.dp))
                                         .clickable { selectedTab = tab }
-                                        .background(if (isSelected) Color.White else Color.Transparent)
+                                        .background(if (isSelected) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.background)
                                         .padding(horizontal = 10.dp, vertical = 4.dp)
                                 ) {
                                     Text(
                                         tab, fontSize = 12.sp,
-                                        color = if (isSelected) Color.Black else Color.Gray,
+                                        color = if (isSelected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
                                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
                                     )
                                 }
@@ -159,8 +146,8 @@ fun HistoryScreen(
                             modifier = Modifier.fillMaxHeight().padding(end = 4.dp),
                             verticalArrangement = Arrangement.SpaceBetween
                         ) {
-                            listOf("10", "8", "6", "4", "2").forEach {
-                                Text(it, fontSize = 10.sp, color = Color.Gray)
+                        listOf("10", "8", "6", "4", "2").forEach {
+                                Text(it, fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
                         }
 
@@ -227,8 +214,8 @@ fun HistoryScreen(
                         modifier = Modifier.fillMaxWidth().padding(start = 28.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        xLabels.forEach {
-                            Text(it, fontSize = 9.sp, color = Color.Gray)
+                    xLabels.forEach {
+                            Text(it, fontSize = 9.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
                 }
@@ -242,16 +229,16 @@ fun HistoryScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("DETAIL LOGS", fontWeight = FontWeight.ExtraBold, fontSize = 16.sp, color = Color.Black)
+                Text("DETAIL LOGS", fontWeight = FontWeight.ExtraBold, fontSize = 16.sp, color = MaterialTheme.colorScheme.onBackground)
                 Surface(
                     shape = RoundedCornerShape(8.dp),
-                    color = Color(0xFF1A1C23)
+                    color = MaterialTheme.colorScheme.surfaceVariant
                 ) {
                     Row(
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text("Filter", fontSize = 13.sp, color = Color.White, fontWeight = FontWeight.Medium)
+                        Text("Filter", fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Medium)
                     }
                 }
             }
@@ -276,7 +263,7 @@ fun HistoryScreen(
 fun LogEntry(date: String, time: String, dataConsumed: String) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
@@ -285,20 +272,20 @@ fun LogEntry(date: String, time: String, dataConsumed: String) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(date, fontSize = 12.sp, color = Color.Gray)
-                Text("Data consumed", fontSize = 12.sp, color = Color.Gray)
-                Text("Session Duration", fontSize = 12.sp, color = Color.Gray)
-                Text("Peak Speed", fontSize = 12.sp, color = Color.Gray)
+                Text(date, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Data consumed", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Session Duration", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Peak Speed", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Spacer(modifier = Modifier.height(6.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(time, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = Color.Black)
-                Text(dataConsumed, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = Color.Black)
-                Text("2h 15m", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = Color.Black)
-                Text("4.2mb/s", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = Color.Black)
+                Text(time, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
+                Text(dataConsumed, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
+                Text("2h 15m", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
+                Text("4.2mb/s", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
             }
         }
     }

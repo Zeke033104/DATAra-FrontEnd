@@ -11,12 +11,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.capstone.datara.ui.theme.DangerRed
 
 @Composable
 fun DeleteAccountScreen(
@@ -26,7 +26,7 @@ fun DeleteAccountScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
             .padding(32.dp),
         horizontalAlignment = Alignment.Start
     ) {
@@ -37,7 +37,7 @@ fun DeleteAccountScreen(
             modifier = Modifier
                 .size(80.dp)
                 .clip(CircleShape)
-                .background(Color(0xFFE0E8FF)),
+                .background(MaterialTheme.colorScheme.surfaceVariant),
             contentAlignment = Alignment.Center
         ) {
             Text("😅", fontSize = 36.sp)
@@ -49,7 +49,7 @@ fun DeleteAccountScreen(
             text = "Are you sure you want to\ndelete your account?",
             fontWeight = FontWeight.ExtraBold,
             fontSize = 26.sp,
-            color = Color.Black,
+            color = MaterialTheme.colorScheme.onBackground,
             lineHeight = 34.sp
         )
 
@@ -57,7 +57,7 @@ fun DeleteAccountScreen(
 
         Text(
             text = "This action cannot be undone.\nAll your data, settings, and account information will be permanently deleted.",
-            color = Color(0xFF9E9E9E),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             fontSize = 14.sp,
             lineHeight = 22.sp
         )
@@ -70,9 +70,14 @@ fun DeleteAccountScreen(
                 .fillMaxWidth()
                 .height(58.dp),
             shape = RoundedCornerShape(30.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
+            colors = ButtonDefaults.buttonColors(containerColor = DangerRed)
         ) {
-            Text("Delete Account", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+            Text(
+                "Delete Account",
+                color = MaterialTheme.colorScheme.onPrimary,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Medium
+            )
         }
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -80,7 +85,7 @@ fun DeleteAccountScreen(
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
             Text(
                 text = "Cancel",
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onBackground,
                 fontSize = 16.sp,
                 textDecoration = TextDecoration.Underline,
                 modifier = Modifier.clickable { onBackClick() }

@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -32,7 +33,7 @@ fun TermsAndConditionsScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
             .padding(24.dp)
     ) {
         Column(
@@ -44,18 +45,18 @@ fun TermsAndConditionsScreen(
                 text = "DATAra Terms and Conditions",
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onBackground
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = "Last Updated: May 06, 2026",
                 fontWeight = FontWeight.Bold,
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onBackground
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = "Welcome to DATAra. By accessing or using the DATAra mobile application (\"App\"), you agree to be bound by these Terms and Conditions. If you do not agree, please do not use the App.",
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onBackground
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -105,7 +106,6 @@ fun TermsAndConditionsScreen(
             Spacer(modifier = Modifier.height(32.dp))
         }
 
-        // Bottom Action Buttons
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -147,7 +147,7 @@ private fun SectionTitle(text: String) {
         text = text,
         fontWeight = FontWeight.Bold,
         fontSize = 16.sp,
-        color = Color.Black
+        color = MaterialTheme.colorScheme.onBackground
     )
     Spacer(modifier = Modifier.height(8.dp))
 }
@@ -157,7 +157,7 @@ private fun SectionBody(text: String) {
     Text(
         text = text,
         fontSize = 14.sp,
-        color = Color.Black,
+        color = MaterialTheme.colorScheme.onSurface,
         lineHeight = 20.sp
     )
 }
